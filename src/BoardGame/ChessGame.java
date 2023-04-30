@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -19,7 +20,71 @@ public class ChessGame {
     public static LinkedList<Piece> ps = new LinkedList<Piece>();
     public static Piece selectedPiece = null;
 
+public static void populateChess(LinkedList<Piece> ps) {
+    String[] playerPieces = {"prisioneiro", "bomba", "soldado", "marechal", "espiao", "cabo"};
+    String[] enemyPieces = {"prisioneiro", "bomba", "soldado", "marechal", "espiao", "cabo"};
+    Random random = new Random();
+    Piece prisioneiroPlayer = new Piece("prisioneiro", random.nextInt(5), 0, 0, true, ps);
+    Piece prisioneiroEnemy = new Piece("prisioneiro", random.nextInt(5), 4, 0, false, ps);
+    for (int i = 0; i < playerPieces.length; i++) {
+        int xp, yp;
+        do {
+            xp = random.nextInt(5);
+            yp = random.nextInt(2);
+        } while (getPiece(xp * 64, yp * 64) != null);
+        switch (playerPieces[i]) {
+            case "bomba":
+                Piece bombaPlayer = new Piece(playerPieces[i], xp, yp, 100, true, ps);
+                break;
+            case "soldado":
+                Piece soldadoPlayer = new Piece(playerPieces[i], xp, yp, 2, true, ps);
+                break;
+            case "marechal":
+                Piece marechalPlayer = new Piece(playerPieces[i], xp, yp, 10, true, ps);
+                break;
+            case "espiao":
+                Piece espiaoPlayer = new Piece(playerPieces[i], xp, yp, 1, true, ps);
+                break;
+            case "cabo":
+                Piece caboPlayer = new Piece(playerPieces[i], xp, yp, 3, true, ps);
+                break;
+            default:
+                System.out.println("Erro");
+                break;
+        }
+    }
+    for (int i = 0; i < enemyPieces.length; i++) {
+        int xp, yp;
+        do {
+            xp = random.nextInt(5);
+            yp = random.nextInt(2)+3;
+        } while (getPiece(xp * 64, yp * 64) != null);
+        switch (enemyPieces[i]) {
+            case "bomba":
+                Piece bombaEnemy = new Piece(enemyPieces[i], xp, yp, 100, false, ps);
+                break;
+            case "soldado":
+                Piece soldadoEnemy = new Piece(enemyPieces[i], xp, yp, 2, false, ps);
+                break;
+            case "marechal":
+                Piece marechalEnemy = new Piece(enemyPieces[i], xp, yp, 10, false, ps);
+                break;
+            case "espiao":
+                Piece espiaoEnemy = new Piece(enemyPieces[i], xp, yp, 1, false, ps);
+                break;
+            case "cabo":
+                Piece caboEnemy = new Piece(enemyPieces[i], xp, yp, 3, false, ps);
+                break;
+            default:
+                System.out.println("Erro");
+                break;
+        }
+    }
+}
+
+
     public static void main(String[] args) throws IOException {
+        populateChess(ps);
         BufferedImage all = ImageIO.read(new File("C:\\chess.png"));
         Image imgs[] = new Image[14];
         int ind = 0;
@@ -29,19 +94,8 @@ public class ChessGame {
                 ind++;
             }
         }
-        Piece player = new Piece("bomba", 1, 0, 0, true, ps);
-        Piece player2 = new Piece("bandeira", 0, 0, 0, true, ps);
-        Piece player3 = new Piece("soldado", 2, 0, 0, true, ps);
-        Piece player4 = new Piece("marechal", 3, 0, 0, true, ps);
-        Piece player5 = new Piece("espiao", 4, 0, 0, true, ps);
-        Piece player6 = new Piece("cabo", 0, 1, 0, true, ps);
+        
 
-        Piece enemy = new Piece("bandeira", 0, 4, 0, false, ps);
-        Piece enemy2 = new Piece("bomba", 1, 4, 0, false, ps);
-        Piece enemy3 = new Piece("soldado", 2, 4, 0, false, ps);
-        Piece enemy4 = new Piece("marechal", 3, 4, 0, false, ps);
-        Piece enemy5 = new Piece("espiao", 4, 4, 0, false, ps);
-        Piece enemy6 = new Piece("cabo", 0, 3, 0, false, ps);
         JFrame frame = new JFrame();
         JPanel pn = new JPanel() {
             @Override
@@ -159,6 +213,7 @@ public class ChessGame {
             @Override
             public void mousePressed(MouseEvent e) {
                 selectedPiece = getPiece(e.getX(), e.getY());
+                System.out.println(selectedPiece.type + " " + selectedPiece.xp + " " + selectedPiece.yp);
             }
 
             @Override
