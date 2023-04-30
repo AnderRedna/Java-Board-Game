@@ -31,7 +31,6 @@ public class Piece {
                 && yp > this.yp) {
             if (ChessGame.getPiece(xp * 64, yp * 64) != null) {
                 if (ChessGame.getPiece(xp * 64, yp * 64).type != type && ChessGame.getPiece(xp * 64, yp * 64).type != "river") {
-                    System.out.println(type + " " + this.type);
                     ChessGame.getPiece(xp * 64, yp * 64).kill(this.type);
                 } else {
                     keepPosition(this.xp, this.yp);

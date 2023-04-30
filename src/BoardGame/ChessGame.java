@@ -1,6 +1,8 @@
 package BoardGame;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -87,6 +89,7 @@ public static void populateChess(LinkedList<Piece> ps) {
     }
 }
 
+public static Boolean isShowed = true;
     public static void main(String[] args) throws IOException {
         populateChess(ps);
         BufferedImage all = ImageIO.read(new File("C:\\chess.png"));
@@ -105,6 +108,7 @@ public static void populateChess(LinkedList<Piece> ps) {
             @Override
             public void paint(Graphics g) {
                 boolean white = true;
+                isShowed = true;
                 for (int y = 0; y < 5; y++) {
                     for (int x = 0; x < 5; x++) {
                         if (white) {
@@ -117,39 +121,38 @@ public static void populateChess(LinkedList<Piece> ps) {
                         white = !white;
                     }
                     for (Piece p : ps) {
-                        if(p.type.equalsIgnoreCase("enemy")){
-                            g.drawImage(imgs[8], p.x, p.y, null);
-                            continue;
-                        }else{
-                            int ind = 0;
-                            if (p.type.equalsIgnoreCase("river")) {
-                                ind = 7;
+                            if(p.type.equalsIgnoreCase("enemy")){
+                                g.drawImage(imgs[8], p.x, p.y, null);
+                                continue;
+                            }else{
+                                int ind = 0;
+                                if (p.type.equalsIgnoreCase("river")) {
+                                    ind = 7;
+                                }
+                                if (p.name.equalsIgnoreCase("prisioneiro")) {
+                                    ind = 1;
+                                }
+                                if (p.name.equalsIgnoreCase("bomba")) {
+                                    ind = 2;
+                                }
+                                if (p.name.equalsIgnoreCase("espiao")) {
+                                    ind = 3;
+                                }
+                                if (p.name.equalsIgnoreCase("soldado")) {
+                                    ind = 4;
+                                }
+                                if (p.name.equalsIgnoreCase("cabo")) {
+                                    ind = 5;
+                                }
+                                if (p.name.equalsIgnoreCase("marechal")) {
+                                    ind = 6;
+                                }
+                                g.drawImage(imgs[ind], p.x, p.y, null);
                             }
-                            if (p.name.equalsIgnoreCase("prisioneiro")) {
-                                ind = 1;
-                            }
-                            if (p.name.equalsIgnoreCase("bomba")) {
-                                ind = 2;
-                            }
-                            if (p.name.equalsIgnoreCase("espiao")) {
-                                ind = 3;
-                            }
-                            if (p.name.equalsIgnoreCase("soldado")) {
-                                ind = 4;
-                            }
-                            if (p.name.equalsIgnoreCase("cabo")) {
-                                ind = 5;
-                            }
-                            if (p.name.equalsIgnoreCase("marechal")) {
-                                ind = 6;
-                            }
-    
-                            g.drawImage(imgs[ind], p.x, p.y, null);
                         }
                     }
                 }
             };
-        };
         frame.setBounds(200 , 200, 500, 380);
         frame.setUndecorated(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -173,14 +176,14 @@ public static void populateChess(LinkedList<Piece> ps) {
         JLabel texto2 = new JLabel("Quantidade restantes: blablabla");
         JLabel texto3 = new JLabel("Resultado: blablabla");
         JButton botao = new JButton("Usar");
-        JToggleButton toggleButton = new JToggleButton("Show positions");
+        JButton hideButton = new JButton("Debug");
         
         toolSection.setLayout(new GridLayout(5, 1));
         toolSection.add(texto1);
         toolSection.add(texto2);
         toolSection.add(texto3);
         toolSection.add(botao);
-        toolSection.add(toggleButton);
+        toolSection.add(hideButton);
         
         JPanel menuSection = new JPanel();
         JLabel menuTexto1 = new JLabel("Menu", JLabel.CENTER);
@@ -201,11 +204,11 @@ public static void populateChess(LinkedList<Piece> ps) {
         
         
         frame.addMouseMotionListener(new MouseMotionListener() {
-
+            
             @Override
             public void mouseMoved(MouseEvent e) {
             }
-
+            
             @Override
             public void mouseDragged(MouseEvent e) {
                 if (selectedPiece != null) {
@@ -215,71 +218,79 @@ public static void populateChess(LinkedList<Piece> ps) {
                 }
             }
         });
+        hideButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if(isShowed == true){
+                        Graphics g = frame.getGraphics();
+                        for (Piece p : ps) {
+                            if(p.type.equalsIgnoreCase("enemy")){
+                                int ind = 0;
+                                if (p.name.equalsIgnoreCase("prisioneiro")) {
+                                    ind = 9;
+                                }
+                                if (p.name.equalsIgnoreCase("bomba")) {
+                                    ind = 10;
+                                }
+                                if (p.name.equalsIgnoreCase("espiao")) {
+                                    ind = 11;
+                                }
+                                if (p.name.equalsIgnoreCase("soldado")) {
+                                    ind = 12;
+                                }
+                                if (p.name.equalsIgnoreCase("cabo")) {
+                                    ind = 13;
+                                }
+                                if (p.name.equalsIgnoreCase("marechal")) {
+                                    ind = 14;
+                                }
+                                g.drawImage(imgs[ind], p.x, p.y, null);
+                            }
+                        }
+                        isShowed = false;
+                    }else{
+                        isShowed = true;
+                        frame.repaint();
+                    }
+                }
+        });
         frame.addMouseListener(new MouseListener() {
+
 
             @Override
             public void mouseClicked(MouseEvent e) {
             }
-
+            
             @Override
             public void mousePressed(MouseEvent e) {
                 selectedPiece = getPiece(e.getX(), e.getY());
                 System.out.println(selectedPiece.name + " " + selectedPiece.xp + " " + selectedPiece.yp);
             }
-
+            
             @Override
             public void mouseReleased(MouseEvent e) {
                 selectedPiece.move(e.getX() / 64, e.getY() / 64);
+    
                 frame.repaint();
-
+                
             }
-
+            
             @Override
             public void mouseEntered(MouseEvent e) {
             }
-
+            
             @Override
             public void mouseExited(MouseEvent e) {
             }
         });
         frame.setDefaultCloseOperation(3);
         frame.setVisible(true);
+        
 
-        while(true) {
-            if (toggleButton.isSelected()) {
-                Graphics g = frame.getGraphics();
-                for (Piece p : ps) {
-                    if(p.type.equalsIgnoreCase("enemy")){
-                        int indE = 0;
-                        if (p.name.equalsIgnoreCase("prisioneiro")) {
-                            indE = 9;
-                        }
-                        if (p.name.equalsIgnoreCase("bomba")) {
-                            indE = 10;
-                        }
-                        if (p.name.equalsIgnoreCase("espiao")) {
-                            indE = 11;
-                        }
-                        if (p.name.equalsIgnoreCase("soldado")) {
-                            indE = 12;
-                        }
-                        if (p.name.equalsIgnoreCase("cabo")) {
-                            indE = 13;
-                        }
-                        if (p.name.equalsIgnoreCase("marechal")) {
-                            indE = 14;
-                        }
-
-                        g.drawImage(imgs[indE], p.x, p.y, null);
-                    }
-                }
-            } else {
-                frame.repaint();
-            }
-        }
     };
-
-
+    
+    
+    
     public static Piece getPiece(int x, int y) {
         int xp = x / 64;
         int yp = y / 64;
