@@ -4,23 +4,23 @@ import java.util.LinkedList;
 
 
 public class Piece {
+    String name;
+    String type;
+    int level;
     int xp;
     int yp;
     int x;
     int y;
-    int level;
-    String type;
-    boolean isPlayer;
     LinkedList<Piece> ps;
 
-    public Piece(String type, int xp, int yp, int level, boolean isPlayer, LinkedList<Piece> ps){
+    public Piece(String name, int xp, int yp, int level, String type, LinkedList<Piece> ps){
+        this.name = name;
+        this.level = level;
         this.type = type;
         this.xp = xp;
         this.yp = yp;
         x = xp*64;
         y = yp*64;
-        this.level = level;
-        this.isPlayer = isPlayer;
         this.ps = ps;
         ps.add(this);
     }
@@ -30,7 +30,7 @@ public class Piece {
                 && !(Math.abs(this.xp - xp) == 1 && Math.abs(this.yp - yp) == 1)
                 && yp > this.yp) {
             if (ChessGame.getPiece(xp * 64, yp * 64) != null) {
-                if (ChessGame.getPiece(xp * 64, yp * 64).isPlayer != isPlayer) {
+                if (ChessGame.getPiece(xp * 64, yp * 64).type != type) {
                     ChessGame.getPiece(xp * 64, yp * 64).kill();
                 } else {
                     keepPosition(this.xp, this.yp);

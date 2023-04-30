@@ -21,11 +21,14 @@ public class ChessGame {
     public static Piece selectedPiece = null;
 
 public static void populateChess(LinkedList<Piece> ps) {
-    String[] playerPieces = {"prisioneiro", "bomba", "soldado", "marechal", "espiao", "cabo"};
-    String[] enemyPieces = {"prisioneiro", "bomba", "soldado", "marechal", "espiao", "cabo"};
+    String[] playerPieces = {"bomba", "soldado", "marechal", "espiao", "cabo"};
+    String[] enemyPieces = {"bomba", "soldado", "marechal", "espiao", "cabo"};
     Random random = new Random();
-    Piece prisioneiroPlayer = new Piece("prisioneiro", random.nextInt(5), 0, 0, true, ps);
-    Piece prisioneiroEnemy = new Piece("prisioneiro", random.nextInt(5), 4, 0, false, ps);
+
+    Piece prisioneiroPlayer = new Piece("prisioneiro", random.nextInt(5), 0, 0, "player", ps);
+    Piece prisioneiroEnemy = new Piece("prisioneiro", random.nextInt(5), 4, 0, "enemy", ps);
+    Piece river = new Piece("river", random.nextInt(5), 2, 0, "river", ps);
+
     for (int i = 0; i < playerPieces.length; i++) {
         int xp, yp;
         do {
@@ -34,22 +37,23 @@ public static void populateChess(LinkedList<Piece> ps) {
         } while (getPiece(xp * 64, yp * 64) != null);
         switch (playerPieces[i]) {
             case "bomba":
-                Piece bombaPlayer = new Piece(playerPieces[i], xp, yp, 100, true, ps);
+            System.out.println("a");
+                Piece bombaPlayer = new Piece(playerPieces[i], xp, yp, 100, "player", ps);
                 break;
             case "soldado":
-                Piece soldadoPlayer = new Piece(playerPieces[i], xp, yp, 2, true, ps);
+                Piece soldadoPlayer = new Piece(playerPieces[i], xp, yp, 2, "player", ps);
                 break;
             case "marechal":
-                Piece marechalPlayer = new Piece(playerPieces[i], xp, yp, 10, true, ps);
+                Piece marechalPlayer = new Piece(playerPieces[i], xp, yp, 10, "player", ps);
                 break;
             case "espiao":
-                Piece espiaoPlayer = new Piece(playerPieces[i], xp, yp, 1, true, ps);
+                Piece espiaoPlayer = new Piece(playerPieces[i], xp, yp, 1, "player", ps);
                 break;
             case "cabo":
-                Piece caboPlayer = new Piece(playerPieces[i], xp, yp, 3, true, ps);
+                Piece caboPlayer = new Piece(playerPieces[i], xp, yp, 3, "player", ps);
                 break;
             default:
-                System.out.println("Erro");
+                System.out.println("ErroAlly");
                 break;
         }
     }
@@ -61,35 +65,34 @@ public static void populateChess(LinkedList<Piece> ps) {
         } while (getPiece(xp * 64, yp * 64) != null);
         switch (enemyPieces[i]) {
             case "bomba":
-                Piece bombaEnemy = new Piece(enemyPieces[i], xp, yp, 100, false, ps);
+                Piece bombaEnemy = new Piece(enemyPieces[i], xp, yp, 100, "enemy", ps);
                 break;
             case "soldado":
-                Piece soldadoEnemy = new Piece(enemyPieces[i], xp, yp, 2, false, ps);
+                Piece soldadoEnemy = new Piece(enemyPieces[i], xp, yp, 2, "enemy", ps);
                 break;
             case "marechal":
-                Piece marechalEnemy = new Piece(enemyPieces[i], xp, yp, 10, false, ps);
+                Piece marechalEnemy = new Piece(enemyPieces[i], xp, yp, 10, "enemy", ps);
                 break;
             case "espiao":
-                Piece espiaoEnemy = new Piece(enemyPieces[i], xp, yp, 1, false, ps);
+                Piece espiaoEnemy = new Piece(enemyPieces[i], xp, yp, 1, "enemy", ps);
                 break;
             case "cabo":
-                Piece caboEnemy = new Piece(enemyPieces[i], xp, yp, 3, false, ps);
+                Piece caboEnemy = new Piece(enemyPieces[i], xp, yp, 3, "enemy", ps);
                 break;
             default:
-                System.out.println("Erro");
+                System.out.println("ErroEnemy");
                 break;
         }
     }
 }
 
-
     public static void main(String[] args) throws IOException {
         populateChess(ps);
         BufferedImage all = ImageIO.read(new File("C:\\chess.png"));
-        Image imgs[] = new Image[14];
+        Image imgs[] = new Image[16];
         int ind = 0;
         for (int y = 0; y < 400; y += 200) {
-            for (int x = 0; x < 1400; x += 200) {
+            for (int x = 0; x < 1600; x += 200) {
                 imgs[ind] = all.getSubimage(x, y, 200, 200).getScaledInstance(64, 64, BufferedImage.SCALE_SMOOTH);
                 ind++;
             }
@@ -114,26 +117,29 @@ public static void populateChess(LinkedList<Piece> ps) {
                     }
                     for (Piece p : ps) {
                         int ind = 0;
-                        if (p.type.equalsIgnoreCase("bandeira")) {
+                        if (p.type.equalsIgnoreCase("river")) {
+                            ind = 7;
+                        }
+                        if (p.name.equalsIgnoreCase("bandeira")) {
                             ind = 1;
                         }
-                        if (p.type.equalsIgnoreCase("bomba")) {
+                        if (p.name.equalsIgnoreCase("bomba")) {
                             ind = 2;
                         }
-                        if (p.type.equalsIgnoreCase("espiao")) {
+                        if (p.name.equalsIgnoreCase("espiao")) {
                             ind = 3;
                         }
-                        if (p.type.equalsIgnoreCase("soldado")) {
+                        if (p.name.equalsIgnoreCase("soldado")) {
                             ind = 4;
                         }
-                        if (p.type.equalsIgnoreCase("cabo")) {
+                        if (p.name.equalsIgnoreCase("cabo")) {
                             ind = 5;
                         }
-                        if (p.type.equalsIgnoreCase("marechal")) {
+                        if (p.name.equalsIgnoreCase("marechal")) {
                             ind = 6;
                         }
-                        if (!p.isPlayer) {
-                            ind += 7;
+                        if (p.type.equalsIgnoreCase("enemy")) {
+                            ind += 8;
                         }
 
                         g.drawImage(imgs[ind], p.x, p.y, null);
