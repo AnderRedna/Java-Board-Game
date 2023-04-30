@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 
 public class ChessGame {
     public static LinkedList<Piece> ps = new LinkedList<Piece>();
@@ -116,33 +117,35 @@ public static void populateChess(LinkedList<Piece> ps) {
                         white = !white;
                     }
                     for (Piece p : ps) {
-                        int ind = 0;
-                        if (p.type.equalsIgnoreCase("river")) {
-                            ind = 7;
+                        if(p.type.equalsIgnoreCase("enemy")){
+                            g.drawImage(imgs[8], p.x, p.y, null);
+                            continue;
+                        }else{
+                            int ind = 0;
+                            if (p.type.equalsIgnoreCase("river")) {
+                                ind = 7;
+                            }
+                            if (p.name.equalsIgnoreCase("prisioneiro")) {
+                                ind = 1;
+                            }
+                            if (p.name.equalsIgnoreCase("bomba")) {
+                                ind = 2;
+                            }
+                            if (p.name.equalsIgnoreCase("espiao")) {
+                                ind = 3;
+                            }
+                            if (p.name.equalsIgnoreCase("soldado")) {
+                                ind = 4;
+                            }
+                            if (p.name.equalsIgnoreCase("cabo")) {
+                                ind = 5;
+                            }
+                            if (p.name.equalsIgnoreCase("marechal")) {
+                                ind = 6;
+                            }
+    
+                            g.drawImage(imgs[ind], p.x, p.y, null);
                         }
-                        if (p.name.equalsIgnoreCase("bandeira")) {
-                            ind = 1;
-                        }
-                        if (p.name.equalsIgnoreCase("bomba")) {
-                            ind = 2;
-                        }
-                        if (p.name.equalsIgnoreCase("espiao")) {
-                            ind = 3;
-                        }
-                        if (p.name.equalsIgnoreCase("soldado")) {
-                            ind = 4;
-                        }
-                        if (p.name.equalsIgnoreCase("cabo")) {
-                            ind = 5;
-                        }
-                        if (p.name.equalsIgnoreCase("marechal")) {
-                            ind = 6;
-                        }
-                        if (p.type.equalsIgnoreCase("enemy")) {
-                            ind += 8;
-                        }
-
-                        g.drawImage(imgs[ind], p.x, p.y, null);
                     }
                 }
             };
@@ -170,12 +173,14 @@ public static void populateChess(LinkedList<Piece> ps) {
         JLabel texto2 = new JLabel("Quantidade restantes: blablabla");
         JLabel texto3 = new JLabel("Resultado: blablabla");
         JButton botao = new JButton("Usar");
+        JToggleButton toggleButton = new JToggleButton("Show positions");
         
-        toolSection.setLayout(new GridLayout(4, 1));
+        toolSection.setLayout(new GridLayout(5, 1));
         toolSection.add(texto1);
         toolSection.add(texto2);
         toolSection.add(texto3);
         toolSection.add(botao);
+        toolSection.add(toggleButton);
         
         JPanel menuSection = new JPanel();
         JLabel menuTexto1 = new JLabel("Menu", JLabel.CENTER);
@@ -219,7 +224,7 @@ public static void populateChess(LinkedList<Piece> ps) {
             @Override
             public void mousePressed(MouseEvent e) {
                 selectedPiece = getPiece(e.getX(), e.getY());
-                System.out.println(selectedPiece.type + " " + selectedPiece.xp + " " + selectedPiece.yp);
+                System.out.println(selectedPiece.name + " " + selectedPiece.xp + " " + selectedPiece.yp);
             }
 
             @Override
@@ -239,7 +244,41 @@ public static void populateChess(LinkedList<Piece> ps) {
         });
         frame.setDefaultCloseOperation(3);
         frame.setVisible(true);
+
+        while(true) {
+            if (toggleButton.isSelected()) {
+                Graphics g = frame.getGraphics();
+                for (Piece p : ps) {
+                    if(p.type.equalsIgnoreCase("enemy")){
+                        int indE = 0;
+                        if (p.name.equalsIgnoreCase("prisioneiro")) {
+                            indE = 9;
+                        }
+                        if (p.name.equalsIgnoreCase("bomba")) {
+                            indE = 10;
+                        }
+                        if (p.name.equalsIgnoreCase("espiao")) {
+                            indE = 11;
+                        }
+                        if (p.name.equalsIgnoreCase("soldado")) {
+                            indE = 12;
+                        }
+                        if (p.name.equalsIgnoreCase("cabo")) {
+                            indE = 13;
+                        }
+                        if (p.name.equalsIgnoreCase("marechal")) {
+                            indE = 14;
+                        }
+
+                        g.drawImage(imgs[indE], p.x, p.y, null);
+                    }
+                }
+            } else {
+                frame.repaint();
+            }
+        }
     };
+
 
     public static Piece getPiece(int x, int y) {
         int xp = x / 64;

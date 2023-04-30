@@ -30,8 +30,9 @@ public class Piece {
                 && !(Math.abs(this.xp - xp) == 1 && Math.abs(this.yp - yp) == 1)
                 && yp > this.yp) {
             if (ChessGame.getPiece(xp * 64, yp * 64) != null) {
-                if (ChessGame.getPiece(xp * 64, yp * 64).type != type) {
-                    ChessGame.getPiece(xp * 64, yp * 64).kill();
+                if (ChessGame.getPiece(xp * 64, yp * 64).type != type && ChessGame.getPiece(xp * 64, yp * 64).type != "river") {
+                    System.out.println(type + " " + this.type);
+                    ChessGame.getPiece(xp * 64, yp * 64).kill(this.type);
                 } else {
                     keepPosition(this.xp, this.yp);
                     return;
@@ -46,8 +47,10 @@ public class Piece {
         }
     }
     
-    public void kill(){
-        ps.remove(this);
+    public void kill(String type){
+        if(this.type != "river"){
+            ps.remove(this);
+        }
     }
 
     public void keepPosition(int xp, int yp){
