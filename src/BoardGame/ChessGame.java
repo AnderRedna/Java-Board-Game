@@ -24,8 +24,8 @@ public class ChessGame {
     public static Piece selectedPiece = null;
 
 public static void populateChess(LinkedList<Piece> ps) {
-    String[] playerPieces = {"bomba", "soldado", "marechal", "espiao", "cabo"};
-    String[] enemyPieces = {"bomba", "soldado", "marechal", "espiao", "cabo"};
+    String[] playerPieces = {"bomba", "bomba", "soldado", "soldado", "soldado", "marechal", "espiao", "cabo", "cabo"};
+    String[] enemyPieces = {"bomba", "bomba", "soldado", "soldado", "soldado", "marechal", "espiao", "cabo", "cabo"};
     Random random = new Random();
 
     Piece prisioneiroPlayer = new Piece("prisioneiro", random.nextInt(5), 0, 0, "player", ps);
@@ -40,7 +40,6 @@ public static void populateChess(LinkedList<Piece> ps) {
         } while (getPiece(xp * 64, yp * 64) != null);
         switch (playerPieces[i]) {
             case "bomba":
-            System.out.println("a");
                 Piece bombaPlayer = new Piece(playerPieces[i], xp, yp, 100, "player", ps);
                 break;
             case "soldado":
@@ -101,7 +100,6 @@ public static Boolean isShowed = true;
                 ind++;
             }
         }
-        
 
         JFrame frame = new JFrame();
         JPanel pn = new JPanel() {
@@ -211,7 +209,7 @@ public static Boolean isShowed = true;
             
             @Override
             public void mouseDragged(MouseEvent e) {
-                if (selectedPiece != null) {
+                if (selectedPiece != null && selectedPiece.type.equalsIgnoreCase("player")) {
                     selectedPiece.x = e.getX() - 32;
                     selectedPiece.y = e.getY() - 32;
                     frame.repaint();
