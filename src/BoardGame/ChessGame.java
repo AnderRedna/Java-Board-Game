@@ -17,20 +17,19 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JToggleButton;
 
 public class ChessGame {
     public static LinkedList<Piece> ps = new LinkedList<Piece>();
     public static Piece selectedPiece = null;
 
-public static void populateChess(LinkedList<Piece> ps) {
-    String[] playerPieces = {"bomba", "bomba", "soldado", "soldado", "soldado", "marechal", "espiao", "cabo", "cabo"};
-    String[] enemyPieces = {"bomba", "bomba", "soldado", "soldado", "soldado", "marechal", "espiao", "cabo", "cabo"};
+    public static void populateChess(LinkedList<Piece> ps) {
+    String[] playerPieces = {"spy", "bomb", "bomb", "corporal", "corporal", "marshal", "soldier", "soldier", "soldier"};
+    String[] enemyPieces = {"spy", "bomb", "bomb", "corporal", "corporal", "marshal", "soldier", "soldier", "soldier"};
     Random random = new Random();
 
-    Piece prisioneiroPlayer = new Piece("prisioneiro", random.nextInt(5), 0, 0, "player", ps);
-    Piece prisioneiroEnemy = new Piece("prisioneiro", random.nextInt(5), 4, 0, "enemy", ps);
-    Piece river = new Piece("river", random.nextInt(5), 2, 0, "river", ps);
+    Prisoner prisioneiroPlayer = new Prisoner("prisoner", random.nextInt(5), 0, 0, "player", ps);
+    Prisoner prisioneiroEnemy = new Prisoner("prisoner", random.nextInt(5), 4, 0, "enemy", ps);
+    River river = new River("river", random.nextInt(5), 2, 0, "river", ps);
 
     for (int i = 0; i < playerPieces.length; i++) {
         int xp, yp;
@@ -39,20 +38,20 @@ public static void populateChess(LinkedList<Piece> ps) {
             yp = random.nextInt(2);
         } while (getPiece(xp * 64, yp * 64) != null);
         switch (playerPieces[i]) {
-            case "bomba":
-                Piece bombaPlayer = new Piece(playerPieces[i], xp, yp, 100, "player", ps);
+            case "bomb":
+                Bomb bombaPlayer = new Bomb(playerPieces[i], xp, yp, 100, "player", ps);
                 break;
-            case "soldado":
-                Piece soldadoPlayer = new Piece(playerPieces[i], xp, yp, 2, "player", ps);
+            case "soldier":
+                Soldier soldadoPlayer = new Soldier(playerPieces[i], xp, yp, 2, "player", ps);
                 break;
-            case "marechal":
-                Piece marechalPlayer = new Piece(playerPieces[i], xp, yp, 10, "player", ps);
+            case "marshal":
+                Marshal marechalPlayer = new Marshal(playerPieces[i], xp, yp, 10, "player", ps);
                 break;
-            case "espiao":
-                Piece espiaoPlayer = new Piece(playerPieces[i], xp, yp, 1, "player", ps);
+            case "spy":
+                Spy espiaoPlayer = new Spy(playerPieces[i], xp, yp, 1, "player", ps);
                 break;
-            case "cabo":
-                Piece caboPlayer = new Piece(playerPieces[i], xp, yp, 3, "player", ps);
+            case "corporal":
+                Corporal caboPlayer = new Corporal(playerPieces[i], xp, yp, 3, "player", ps);
                 break;
             default:
                 System.out.println("ErroAlly");
@@ -66,20 +65,20 @@ public static void populateChess(LinkedList<Piece> ps) {
             yp = random.nextInt(2)+3;
         } while (getPiece(xp * 64, yp * 64) != null);
         switch (enemyPieces[i]) {
-            case "bomba":
-                Piece bombaEnemy = new Piece(enemyPieces[i], xp, yp, 100, "enemy", ps);
+            case "bomb":
+                Bomb bombaEnemy = new Bomb(enemyPieces[i], xp, yp, 100, "enemy", ps);
                 break;
-            case "soldado":
-                Piece soldadoEnemy = new Piece(enemyPieces[i], xp, yp, 2, "enemy", ps);
+            case "soldier":
+                Soldier soldadoEnemy = new Soldier(enemyPieces[i], xp, yp, 2, "enemy", ps);
                 break;
-            case "marechal":
-                Piece marechalEnemy = new Piece(enemyPieces[i], xp, yp, 10, "enemy", ps);
+            case "marshal":
+                Marshal marechalEnemy = new Marshal(enemyPieces[i], xp, yp, 10, "enemy", ps);
                 break;
-            case "espiao":
-                Piece espiaoEnemy = new Piece(enemyPieces[i], xp, yp, 1, "enemy", ps);
+            case "spy":
+                Spy espiaoEnemy = new Spy(enemyPieces[i], xp, yp, 1, "enemy", ps);
                 break;
-            case "cabo":
-                Piece caboEnemy = new Piece(enemyPieces[i], xp, yp, 3, "enemy", ps);
+            case "corporal":
+                Corporal caboEnemy = new Corporal(enemyPieces[i], xp, yp, 3, "enemy", ps);
                 break;
             default:
                 System.out.println("ErroEnemy");
@@ -127,22 +126,22 @@ public static Boolean isShowed = true;
                                 if (p.type.equalsIgnoreCase("river")) {
                                     ind = 7;
                                 }
-                                if (p.name.equalsIgnoreCase("prisioneiro")) {
+                                if (p.name.equalsIgnoreCase("prisoner")) {
                                     ind = 1;
                                 }
-                                if (p.name.equalsIgnoreCase("bomba")) {
+                                if (p.name.equalsIgnoreCase("bomb")) {
                                     ind = 2;
                                 }
-                                if (p.name.equalsIgnoreCase("espiao")) {
+                                if (p.name.equalsIgnoreCase("spy")) {
                                     ind = 3;
                                 }
-                                if (p.name.equalsIgnoreCase("soldado")) {
+                                if (p.name.equalsIgnoreCase("soldier")) {
                                     ind = 4;
                                 }
-                                if (p.name.equalsIgnoreCase("cabo")) {
+                                if (p.name.equalsIgnoreCase("corporal")) {
                                     ind = 5;
                                 }
-                                if (p.name.equalsIgnoreCase("marechal")) {
+                                if (p.name.equalsIgnoreCase("marshal")) {
                                     ind = 6;
                                 }
                                 g.drawImage(imgs[ind], p.x, p.y, null);
@@ -202,7 +201,6 @@ public static Boolean isShowed = true;
         
         
         frame.addMouseMotionListener(new MouseMotionListener() {
-            
             @Override
             public void mouseMoved(MouseEvent e) {
             }
@@ -224,22 +222,22 @@ public static Boolean isShowed = true;
                         for (Piece p : ps) {
                             if(p.type.equalsIgnoreCase("enemy")){
                                 int ind = 0;
-                                if (p.name.equalsIgnoreCase("prisioneiro")) {
+                                if (p.name.equalsIgnoreCase("prisoner")) {
                                     ind = 9;
                                 }
-                                if (p.name.equalsIgnoreCase("bomba")) {
+                                if (p.name.equalsIgnoreCase("bomb")) {
                                     ind = 10;
                                 }
-                                if (p.name.equalsIgnoreCase("espiao")) {
+                                if (p.name.equalsIgnoreCase("spy")) {
                                     ind = 11;
                                 }
-                                if (p.name.equalsIgnoreCase("soldado")) {
+                                if (p.name.equalsIgnoreCase("soldier")) {
                                     ind = 12;
                                 }
-                                if (p.name.equalsIgnoreCase("cabo")) {
+                                if (p.name.equalsIgnoreCase("corporal")) {
                                     ind = 13;
                                 }
-                                if (p.name.equalsIgnoreCase("marechal")) {
+                                if (p.name.equalsIgnoreCase("marshal")) {
                                     ind = 14;
                                 }
                                 g.drawImage(imgs[ind], p.x, p.y, null);
@@ -267,9 +265,13 @@ public static Boolean isShowed = true;
             
             @Override
             public void mouseReleased(MouseEvent e) {
-                selectedPiece.move(e.getX() / 64, e.getY() / 64);
-    
-                frame.repaint();
+                if(selectedPiece.type.equalsIgnoreCase("enemy")){
+                    //criar funcao pra movimentar inimigo
+                    return;
+                }else{
+                    selectedPiece.move(e.getX() / 64, e.getY() / 64, selectedPiece.type);
+                    frame.repaint();
+                }
                 
             }
             
