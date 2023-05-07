@@ -31,8 +31,13 @@ public class Corporal extends Piece {
             return;
             }
         }else{
-            System.out.println("Enemy Spy");
+            if (ChessGame.getPiece(xp * 64, yp * 64) != null && ChessGame.getPiece(xp * 64, yp * 64).type != type){
+                ChessGame.getPiece(xp * 64, yp * 64).kill(this.type, this.name, this.level, this);
+            }
+            this.xp = xp;
+            this.yp = yp;
+            x = xp * 64;
+            y = yp * 64;
         }
     }
 }
-

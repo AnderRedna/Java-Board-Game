@@ -27,28 +27,29 @@ public abstract class Piece {
     public abstract void move(int xp, int yp, String type);
 
     public void kill(String type, String name, int level, Piece p){
-        System.out.println("Killing " + this.name);
-        System.out.println("Killed by " + name);
-
         if(p.name == this.name){
             ps.remove(this);
             ps.remove(p);
         }
+
+        if(p.name != "corporal" && this.name == "bomb"){    
+            ps.remove(this);
+            ps.remove(p);
+            return;
+        }
+
         if(p.name == "corporal" && this.name == "bomb"){    
             System.out.println("Corporal defused bomb");
             ps.remove(this);
             return;
         }else if(p.name == "spy" && this.name == "marshal"){
-            System.out.println("Spy killed marshal");
             ps.remove(this);
             return;
         }else{
             if(p.compareLevels(this)){
-                System.out.println("Killed by " + name);
                 ps.remove(this);
                 return;
             }else{
-                System.out.println("Killed by " + name);
                 ps.remove(p);
                 return;
             }

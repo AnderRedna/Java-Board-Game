@@ -9,6 +9,8 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -17,6 +19,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.plaf.synth.SynthStyleFactory;
 
 public class ChessGame {
     public static LinkedList<Piece> ps = new LinkedList<Piece>();
@@ -24,12 +27,12 @@ public class ChessGame {
 
     public static void populateChess(LinkedList<Piece> ps) {
     String[] playerPieces = {"spy", "bomb", "bomb", "corporal", "corporal", "marshal", "soldier", "soldier", "soldier"};
-    String[] enemyPieces = {"spy", "bomb", "bomb", "corporal", "corporal", "marshal", "soldier", "soldier", "soldier"};
+    String[] enemyPieces = {"bomb", "bomb", "corporal", "corporal", "soldier", "soldier", "soldier", "spy", "marshal"};
     Random random = new Random();
 
     Prisoner prisioneiroPlayer = new Prisoner("prisoner", random.nextInt(5), 0, 0, "player", ps);
     Prisoner prisioneiroEnemy = new Prisoner("prisoner", random.nextInt(5), 4, 0, "enemy", ps);
-    River river = new River("river", random.nextInt(5), 2, 0, "river", ps);
+    River river = new River("river", random.nextInt(5), 2, 1000, "river", ps);
 
     for (int i = 0; i < playerPieces.length; i++) {
         int xp, yp;
@@ -251,8 +254,6 @@ public static Boolean isShowed = true;
                 }
         });
         frame.addMouseListener(new MouseListener() {
-
-
             @Override
             public void mouseClicked(MouseEvent e) {
             }
@@ -260,7 +261,6 @@ public static Boolean isShowed = true;
             @Override
             public void mousePressed(MouseEvent e) {
                 selectedPiece = getPiece(e.getX(), e.getY());
-                System.out.println(selectedPiece.name + " " + selectedPiece.xp + " " + selectedPiece.yp);
             }
             
             @Override
@@ -272,7 +272,7 @@ public static Boolean isShowed = true;
                     selectedPiece.move(e.getX() / 64, e.getY() / 64, selectedPiece.type);
                     frame.repaint();
                 }
-                
+                enemyMove(ps);
             }
             
             @Override
@@ -288,7 +288,91 @@ public static Boolean isShowed = true;
         
 
     };
+    public static void enemyMove(LinkedList<Piece> p) {
+        ArrayList<Piece> enemies = new ArrayList<>();
+        ArrayList<Piece> movableEnemies = new ArrayList<>();
     
+        for (Piece piece : p) {
+            if (piece.type.equalsIgnoreCase("enemy") && !piece.name.equalsIgnoreCase("bomb")) {
+                enemies.add(piece);
+                if (hasAvailableMoves(piece)) {
+                    movableEnemies.add(piece);
+                }
+            }
+        }
+    
+        if (movableEnemies.size() > 0) {
+            int randomEnemy = (int) (Math.random() * movableEnemies.size());
+            Piece enemy = movableEnemies.get(randomEnemy);
+            System.out.println("Peça inimiga selecionada: " + enemy.name);
+            ArrayList<Point> availableMoves = new ArrayList<>();
+            int[] xMoves = {-1, 0, 1};
+            int[] yMoves = {0, -1, 0};
+            for (int i = 0; i < xMoves.length; i++) {
+                int newRow = enemy.xp + xMoves[i];
+                int newCol = enemy.yp + yMoves[i];
+                if ((newRow >= 0 && newRow < 5) && (newCol >= 0 && newCol < 5)) {
+                    if (newRow == enemy.xp && newCol == enemy.yp) {
+                        continue;
+                    }
+                    Piece destPiece = getPiece(newRow * 64, newCol * 64);
+                    if ((destPiece == null || destPiece.type != enemy.type) && !isRiver(newRow * 64, newCol * 64)) {
+                        availableMoves.add(new Point(newRow, newCol));
+                    }
+                }
+            }
+
+    
+            if (availableMoves.size() > 0) {
+                int randomMove = (int) (Math.random() * availableMoves.size());
+                Point destination = availableMoves.get(randomMove);
+                switch (enemy.name.toLowerCase()) {
+                    case "spy":
+                        ((Spy) enemy).move(destination.x, destination.y, enemy.type);
+                        break;
+                    case "corporal":
+                        ((Corporal) enemy).move(destination.x, destination.y, enemy.type);
+                        break;
+                    case "marshal":
+                        ((Marshal) enemy).move(destination.x, destination.y, enemy.type);
+                        break;
+                    case "soldier":
+                        ((Soldier) enemy).move(destination.x, destination.y, enemy.type);
+                        break;
+                    case "prisoner":
+                        ((Prisoner) enemy).move(destination.x, destination.y, enemy.type);
+                        break;
+                    default:
+                        System.out.println("Peça inimiga selecionada não é movível.");
+                        break;
+                }
+            } else {
+                System.out.println("A peça inimiga selecionada não tem movimentos disponíveis.");
+            }
+            
+        } else if (enemies.size() > 0) {
+            System.out.println("Nenhuma peça inimiga tem movimentos disponíveis.");
+        } else {
+            System.out.println("Não há peças inimigas para mover.");
+        }
+    }
+    
+    
+    public static boolean hasAvailableMoves(Piece enemy) {
+        int[] xMoves = {-1, 0, 1};
+        int[] yMoves = {0, -1, 0};
+        for (int i = 0; i < xMoves.length; i++) {
+            int newRow = enemy.xp + xMoves[i];
+            int newCol = enemy.yp + yMoves[i];
+            if ((newRow >= 0 && newRow < 5) && (newCol >= 0 && newCol < 5)) {
+                Piece destPiece = getPiece(newRow * 64, newCol * 64);
+                if ((destPiece == null || destPiece.type != enemy.type) && !isRiver(newRow * 64, newCol * 64)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     
     
     public static Piece getPiece(int x, int y) {
@@ -301,4 +385,16 @@ public static Boolean isShowed = true;
         }
         return null;
     }
+
+    public static boolean isRiver(int x, int y) {
+        int xp = x / 64;
+        int yp = y / 64;
+        for (Piece p : ps) {
+            if (p.xp == xp && p.yp == yp && p.type.equalsIgnoreCase("river")) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
 }
