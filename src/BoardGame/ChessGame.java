@@ -266,7 +266,6 @@ public static Boolean isShowed = true;
             @Override
             public void mouseReleased(MouseEvent e) {
                 if(selectedPiece.type.equalsIgnoreCase("enemy")){
-                    //criar funcao pra movimentar inimigo
                     return;
                 }else{
                     selectedPiece.move(e.getX() / 64, e.getY() / 64, selectedPiece.type);
@@ -321,7 +320,6 @@ public static Boolean isShowed = true;
                     }
                 }
             }
-
     
             if (availableMoves.size() > 0) {
                 int randomMove = (int) (Math.random() * availableMoves.size());

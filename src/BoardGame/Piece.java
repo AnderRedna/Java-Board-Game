@@ -32,10 +32,18 @@ public abstract class Piece {
             ps.remove(p);
         }
 
-        if(p.name != "corporal" && this.name == "bomb"){    
+        if(this.name == "bomb"){
             ps.remove(this);
             ps.remove(p);
             return;
+        }
+
+        if(this.name == "prisoner"){
+            System.out.println("You won!");
+            System.out.println("You won!");
+            System.out.println("You won!");
+            System.out.println("You won!");
+            System.out.println("You won!");
         }
 
         if(p.name == "corporal" && this.name == "bomb"){    
