@@ -22,6 +22,8 @@ import javax.swing.JPanel;
 import javax.swing.plaf.synth.SynthStyleFactory;
 
 public class ChessGame {
+    public static int dicasRestantes = 2;
+
     public static LinkedList<Piece> ps = new LinkedList<Piece>();
     public static Piece selectedPiece = null;
 
@@ -171,19 +173,24 @@ public static Boolean isShowed = true;
 
         Font fontMenu = new Font("Arial", Font.BOLD, 24);
         JPanel toolSection = new JPanel();
+        toolSection.setSize(180, 200);
         JLabel texto1 = new JLabel("Dicas", JLabel.CENTER);
         texto1.setFont(fontMenu);
-        JLabel texto2 = new JLabel("Quantidade restantes: blablabla");
-        JLabel texto3 = new JLabel("Resultado: blablabla");
-        JButton botao = new JButton("Usar");
+        texto1.setPreferredSize(new Dimension(180, 30)); // Definindo tamanho fixo para a label
+        JLabel labelDicasRestante = new JLabel("Dicas restantes: " + dicasRestantes, JLabel.CENTER);
+        labelDicasRestante.setPreferredSize(new Dimension(180, 30)); // Definindo tamanho fixo para a label
+        JLabel labDicasResult = new JLabel("Aguardando..." , JLabel.CENTER);
+        labDicasResult.setPreferredSize(new Dimension(180, 30)); // Definindo tamanho fixo para a label
         JButton hideButton = new JButton("Debug");
-        
+        JButton btnDica = new JButton("Dica");
+
         toolSection.setLayout(new GridLayout(5, 1));
         toolSection.add(texto1);
-        toolSection.add(texto2);
-        toolSection.add(texto3);
-        toolSection.add(botao);
+        toolSection.add(labelDicasRestante);
+        toolSection.add(labDicasResult);
+        toolSection.add(btnDica);
         toolSection.add(hideButton);
+
         
         JPanel menuSection = new JPanel();
         JLabel menuTexto1 = new JLabel("Menu", JLabel.CENTER);
@@ -253,6 +260,58 @@ public static Boolean isShowed = true;
                     }
                 }
         });
+
+        btnDica.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (dicasRestantes > 0) {
+                    System.out.println("Selecione uma coluna:");
+                    pn.addMouseListener(new MouseListener() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            int coluna = e.getX() / 64;
+                            if (colunaContemBomba(coluna)) {
+                                dicasRestantes--;
+                                labelDicasRestante.setText("Dicas restante: " + dicasRestantes);
+                                labelDicasRestante.repaint();
+                                labDicasResult.setText("Há bombas na coluna " + coluna);
+                                labDicasResult.repaint();
+                            } else {
+                                dicasRestantes--;
+                                labDicasResult.setText("Não há bombas na coluna " + coluna);
+                                labDicasResult.repaint();
+                            }
+                            if (dicasRestantes == 0){
+                                labelDicasRestante.setText("Você já usou todas as dicas!");
+                                labelDicasRestante.repaint();
+                                btnDica.setEnabled(false);
+                            }
+                            pn.removeMouseListener(this);
+                        }
+        
+                        @Override
+                        public void mousePressed(MouseEvent e) {
+                        }
+        
+                        @Override
+                        public void mouseReleased(MouseEvent e) {
+                        }
+        
+                        @Override
+                        public void mouseEntered(MouseEvent e) {
+                        }
+        
+                        @Override
+                        public void mouseExited(MouseEvent e) {
+                        }
+                    });
+                } else {
+                    System.out.println("Você já usou todas as dicas!");
+                }
+            }
+        });
+        
+
         frame.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -394,5 +453,15 @@ public static Boolean isShowed = true;
         }
         return false;
     }
+
+    public static boolean colunaContemBomba(int coluna) {
+        for (Piece p : ps) {
+            if (p.xp == coluna && p.type.equalsIgnoreCase("enemy") && p.name.equalsIgnoreCase("bomb")) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     
 }

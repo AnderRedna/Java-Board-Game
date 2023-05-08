@@ -6,6 +6,8 @@ public abstract class Piece {
     String name;
     String type;
     int level;
+    int startX;
+    int startY;
     int xp;
     int yp;
     int x;
@@ -16,6 +18,8 @@ public abstract class Piece {
         this.name = name;
         this.level = level;
         this.type = type;
+        this.startX = xp;
+        this.startY = yp;
         this.xp = xp;
         this.yp = yp;
         x = xp*64;
@@ -39,11 +43,11 @@ public abstract class Piece {
         }
 
         if(this.name == "prisoner"){
-            System.out.println("You won!");
-            System.out.println("You won!");
-            System.out.println("You won!");
-            System.out.println("You won!");
-            System.out.println("You won!");
+            if(this.type.equalsIgnoreCase("enemy")){
+                System.out.println("O Jogador ganhou!");
+            }else{
+                System.out.println("O Jogador perdeu!");
+            }
         }
 
         if(p.name == "corporal" && this.name == "bomb"){    
