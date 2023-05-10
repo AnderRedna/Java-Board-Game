@@ -3,6 +3,7 @@ package BoardGame;
 import java.awt.*;
 import javax.swing.*;
 import java.io.IOException;
+import java.awt.event.*;
 
 public class MenuScreen extends JPanel {
 
@@ -34,6 +35,19 @@ public class MenuScreen extends JPanel {
         buttonsPanel.setBackground(new Color(102, 51, 0));
 
         JButton random = new JButton("Aleatório");
+        random.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                menuFrame.dispose(); // fecha a tela inicial
+                try {
+                    new ChessGame();
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+            }
+        });
+        
         JButton select = new JButton("Escolher posições");
         random.setPreferredSize(new Dimension(140,50));
         select.setPreferredSize(new Dimension(140,50));

@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.plaf.synth.SynthStyleFactory;
 
 public class ChessGame {
+    private static JFrame frame;
     public static int dicasRestantes = 2;
 
     public static LinkedList<Piece> ps = new LinkedList<Piece>();
@@ -93,7 +94,13 @@ public class ChessGame {
 }
 
 public static Boolean isShowed = true;
-    public static void main(String[] args) throws IOException {
+
+    public ChessGame() throws IOException {
+        this.init();
+    }
+
+    public void init() throws IOException {
+        frame = new JFrame();
         populateChess(ps);
         BufferedImage all = ImageIO.read(new File("C:\\chess.png"));
         Image imgs[] = new Image[16];
@@ -105,7 +112,6 @@ public static Boolean isShowed = true;
             }
         }
 
-        JFrame frame = new JFrame();
         JPanel pn = new JPanel() {
             @Override
             public void paint(Graphics g) {
@@ -260,6 +266,7 @@ public static Boolean isShowed = true;
                     }
                 }
         });
+        
 
         btnDica.addActionListener(new ActionListener() {
             @Override
@@ -343,9 +350,17 @@ public static Boolean isShowed = true;
         });
         frame.setDefaultCloseOperation(3);
         frame.setVisible(true);
-        
-
+    }
+    
+    public static void main(String[] args) throws IOException {
+        new ChessGame();
     };
+    public static void fecharJogo(){
+        // Fechamento do JFrame utilizando a variável frame
+        frame.dispose();
+    }
+
+    
     public static void enemyMove(LinkedList<Piece> p) {
         ArrayList<Piece> enemies = new ArrayList<>();
         ArrayList<Piece> movableEnemies = new ArrayList<>();

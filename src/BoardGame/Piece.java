@@ -1,6 +1,9 @@
 package BoardGame;
 
+import java.io.IOException;
 import java.util.LinkedList;
+
+import javax.swing.JFrame;
 
 public abstract class Piece {
     String name;
@@ -13,7 +16,7 @@ public abstract class Piece {
     int x;
     int y;
     LinkedList<Piece> ps;
-
+    
     public Piece(String name, int xp, int yp, int level, String type, LinkedList<Piece> ps){
         this.name = name;
         this.level = level;
@@ -27,23 +30,25 @@ public abstract class Piece {
         this.ps = ps;
         ps.add(this);
     }
-
+    
     public abstract void move(int xp, int yp, String type);
-
+    
     public void kill(String type, String name, int level, Piece p){
         if(p.name == this.name){
             ps.remove(this);
             ps.remove(p);
         }
-
+        
         if(this.name == "bomb"){
             ps.remove(this);
             ps.remove(p);
             return;
         }
 
+        
         if(this.name == "prisoner"){
             if(this.type.equalsIgnoreCase("enemy")){
+                ChessGame.fecharJogo();
                 System.out.println("O Jogador ganhou!");
             }else{
                 System.out.println("O Jogador perdeu!");
