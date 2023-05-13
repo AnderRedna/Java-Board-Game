@@ -1,4 +1,4 @@
-<h1>Jogo de Tabuleiro em Java</h1>
+<h1>Português</h1>
 
 <h2>Descrição</h2>
 <p>Este repositório contém um jogo de tabuleiro implementado em Java. O jogo proporciona uma experiência interativa onde os jogador pode entrar a CPU</p>
@@ -32,7 +32,7 @@
 
 ---
 
-<h1>Java Board Game</h1>
+<h1>English</h1>
 
 <h2>Description</h2>
 <p>This repository contains a Java board game. The game provides an interactive experience where players can play against the CPU.</p>
